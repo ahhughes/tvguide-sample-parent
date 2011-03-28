@@ -16,7 +16,6 @@
  */
 package com.acme.gwt.client.presenter;
 
-import com.acme.gwt.client.ioc.TvGuideGinjector;
 import com.acme.gwt.client.place.AboutPlace;
 import com.acme.gwt.client.place.ShowDetailPlace;
 import com.acme.gwt.client.place.WelcomePlace;
@@ -25,17 +24,11 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 /**
  * @author colin
  */
 public class TvGuideActivityMapper implements ActivityMapper {
-	@Inject
-	TvGuideGinjector injector;
-	
-	@Inject
-	Provider<AboutPresenter> aboutPresenterProvider;
 	
 	@Inject
 	ActivityFactory factory;
@@ -49,9 +42,7 @@ public class TvGuideActivityMapper implements ActivityMapper {
 			return factory.createShowDetailPresenter((ShowDetailPlace) place);
 		}
 		if (place instanceof AboutPlace) {
-			final AboutPresenter p = aboutPresenterProvider.get();
-//			injector.injectPresenter(p);
-			return p;
+			return factory.createAboutPresenter((AboutPlace)place);
 		}
 
 		return null;
@@ -61,6 +52,7 @@ public class TvGuideActivityMapper implements ActivityMapper {
 	 *
 	 */
 	public interface ActivityFactory {
+		AboutPresenter createAboutPresenter(AboutPlace place);
 		WelcomePresenter createWelcomePresenter(WelcomePlace place);
 		ShowDetailPresenter createShowDetailPresenter(ShowDetailPlace place);
 	}

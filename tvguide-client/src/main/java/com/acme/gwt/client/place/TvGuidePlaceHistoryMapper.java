@@ -34,6 +34,7 @@ public interface TvGuidePlaceHistoryMapper
 
 	@ImplementedBy(TvGuideGinjector.class)
 	public interface TvGuidePlaceTokenizers {
+		AboutPlace.Tokenizer aboutTokenizer();
 		WelcomePlace.Tokenizer welcomeTokenizer();
 		ShowDetailPlace.Tokenizer showDetailPlaceTokenizer();
 	}
