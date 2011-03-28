@@ -36,19 +36,17 @@ public class TvGuideActivityMapper implements ActivityMapper {
 	
 	@Inject
 	Provider<AboutPresenter> aboutPresenterProvider;
+	
+	@Inject
+	ActivityFactory factory;
 
 	public Activity getActivity(Place place) {
 		GWT.log("TvGuideActivityMapper.getActivity(place) invoked with argument type "+place.getClass().getName());
 		if (place instanceof WelcomePlace) {
-			WelcomePresenter p = new WelcomePresenter((WelcomePlace) place);
-			injector.injectPresenter(p);
-			return p;
+			return factory.createWelcomePresenter((WelcomePlace) place);
 		}
 		if (place instanceof ShowDetailPlace) {
-			ShowDetailPresenter p = new ShowDetailPresenter(
-					(ShowDetailPlace) place);
-			injector.injectPresenter(p);
-			return p;
+			return factory.createShowDetailPresenter((ShowDetailPlace) place);
 		}
 		if (place instanceof AboutPlace) {
 			final AboutPresenter p = aboutPresenterProvider.get();
@@ -58,5 +56,12 @@ public class TvGuideActivityMapper implements ActivityMapper {
 
 		return null;
 	}
-
+	/**
+	 * Methods capable of creating presenters given the place that is passed in
+	 *
+	 */
+	public interface ActivityFactory {
+		WelcomePresenter createWelcomePresenter(WelcomePlace place);
+		ShowDetailPresenter createShowDetailPresenter(ShowDetailPlace place);
+	}
 }

@@ -28,6 +28,7 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
 /**
  * @author colin
@@ -46,7 +47,9 @@ public class ShowDetailPresenter extends AbstractActivity
 	PlaceController placeController;
 
 	private final ShowDetailPlace place;
-	public ShowDetailPresenter(ShowDetailPlace place) {
+	@Inject
+	public ShowDetailPresenter(@Assisted
+	ShowDetailPlace place) {
 		this.place = place;
 	}
 
@@ -54,16 +57,17 @@ public class ShowDetailPresenter extends AbstractActivity
 	public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 		view.setPresenter(this);
 		//load it and show it
-		rf.find(place.getId()).to(new Receiver<TvShowProxy>() {
-			@Override
-			public void onSuccess(TvShowProxy response) {
-				//deal with data, wire into view
-				view.getEditor().display(response);
+		rf.find(place.getId()).with(view.getEditor().getPaths()).to(
+				new Receiver<TvShowProxy>() {
+					@Override
+					public void onSuccess(TvShowProxy response) {
+						//deal with data, wire into view
+						view.getEditor().display(response);
 
-				//show view
-				panel.setWidget(view);
-			}
-		}).fire();
+						//show view
+						panel.setWidget(view);
+					}
+				}).fire();
 	}
 
 	@Override
